@@ -1,2 +1,2 @@
 # FreqFusion
-TPAMI：Frequency-aware Feature Fusion for Dense Image Prediction
+TPAMI 2024：Frequency-aware Feature Fusion for Dense Image Prediction
