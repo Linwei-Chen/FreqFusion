@@ -18,7 +18,9 @@ Dense image prediction tasks demand features with strong category information an
 - We propose FreqFusion, which addresses category inconsistency and boundary displacement by adaptively smoothing the high-level feature with spatial-variant low-pass filters, resampling nearby category-consistent features to replace inconsistent features in the high-level feature, and enhancing the high frequency of lower-level features.
 - Qualitative and quantitative results demonstrate that FreqFusion increases intra-category similarity and similarity margin, leading to a consistent and considerable improvement across various tasks, including semantic segmentation, object detection, instance segmentation, and panoptic segmentation.
 
-<img src="../FADC/README.assets/image-20240401161246300.png" alt="图片描述" width="512">
+
+
+<img src="README.assets/image-20240831173922305.png" alt="图片描述" width="918">
 
 ## Code Usage
 
