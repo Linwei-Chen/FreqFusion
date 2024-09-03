@@ -155,9 +155,9 @@ Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here]() (mmdet==2.28.1)
 
 Checkpoint:
 
-| Mask R-CNN     | Backbone  | Mask AP  | Configs                                                      | Links                                                        |
-| -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FreqFusion** | ResNet-50 | **36.0** | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
+| Faster R-CNN   | Backbone  | Mask AP                  | Configs                                                      | Links                                                        |
+| -------------- | --------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **FreqFusion** | ResNet-50 | **39.5 **(39.4 in paper) | [config](./mmdetection/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
 
 
 
@@ -205,7 +205,7 @@ Checkpoint:
 
 | Mask R-CNN     | Backbone  | Mask AP  | Configs                                                      | Links                                                        |
 | -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FreqFusion** | ResNet-50 | **36.0** | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1nghqP5itCInttxIk15oqjA?pwd=PAMI) (code: PAMI) |
+| **FreqFusion** | ResNet-50 | **36.0** | [config](./mmdetection/configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1nghqP5itCInttxIk15oqjA?pwd=PAMI) (code: PAMI) |
 
 
 
