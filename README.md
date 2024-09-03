@@ -26,7 +26,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ### FreqFusion
 
-The individual code for **FreqFusion** is available [here](https://kimi.moonshot.cn/chat/FreqFusion.py). **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very straightforward.
+The clean code for **FreqFusion** is available [here](https://kimi.moonshot.cn/chat/FreqFusion.py). By utilizing their frequency properties, **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very simple.
 
 ```python
 m = FreqFusion(hr_channels=64, lr_channels=64)
@@ -63,20 +63,18 @@ Core modification:
 
 Checkpoint:
 
-| Method               | Backbone | mIoU                     | Configs                                                      | Links |
-| -------------------- | -------- | ------------------------ | ------------------------------------------------------------ | ----- |
-| SegNeXt + FreqFusion | MSCAN-T  | **43.7** (43.5 in paper) | [config](./SegNeXt/local_configs/segnext/tiny/segnext.tiny.freqfusion.512x512.ade.160k.py) |       |
+| Method               | Backbone | mIoU                     | Configs                                                      | Links                                                        |
+| -------------------- | -------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| SegNeXt + FreqFusion | MSCAN-T  | **43.7** (43.5 in paper) | [config](./SegNeXt/local_configs/segnext/tiny/segnext.tiny.freqfusion.512x512.ade.160k.py) | [ckpt](https://pan.baidu.com/s/12rqBsLDS4bPqePvjmpBLEQ?pwd=PAMI) (code: PAMI) |
 
+Note:
 
-
-#### Code Usage
-
-#### Installation (TODO)
+The original SegNeXt code can be found [here](https://github.com/Visual-Attention-Network/SegNeXt).
 
 Our code is based on [MMSegmentation](https://github.com/open-mmlab/mmsegmentation). You can install mmseg by:
 
 ```
-pip install mmsegmentation==0.25.0
+pip install mmsegmentation==0.24.1
 ```
 
 Please refer to [get_started.md](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/get_started.md#installation) for more details on installation, and [dataset_prepare.md](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#prepare-datasets) for information on dataset preparation. For further details on code usage, you can refer to [this](https://github.com/raoyongming/HorNet/tree/master/semantic_segmentation).
@@ -87,6 +85,8 @@ You can install mmcv-full by:
 pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
 pip install mmcv-full==1.5.3 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11/index.html
 ```
+
+For more details on installing and using SegNeXt, please refer to the [README](./SegNeXt/README.md) file.
 
 
 
@@ -128,6 +128,8 @@ See [Getting Started with Mask2Former](https://github.com/facebookresearch/Mask2
 
 See [installation instructions](https://github.com/facebookresearch/Mask2Former/blob/main/INSTALL.md).
 
+For more details on installing and using Mask2Former, please refer to the [README](./Mask2Former/README.md) file.
+
 
 
 ### Object Detection
@@ -150,6 +152,12 @@ Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here]() (mmdet==2.28.1)
 | Nearest                   | *R101*   | 39.4     |
 | DySample+                 | *R101*   | 40.5     |
 | **FreqFusion (Ours)**     | *R101*   | **41.0** |
+
+Checkpoint:
+
+| Mask R-CNN     | Backbone  | Mask AP  | Configs                                                      | Links                                                        |
+| -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **FreqFusion** | ResNet-50 | **36.0** | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
 
 
 
@@ -193,6 +201,16 @@ Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here]() (mmdet==2.28.1)
 
 
 
+Checkpoint:
+
+| Mask R-CNN     | Backbone  | Mask AP  | Configs                                                      | Links                                                        |
+| -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **FreqFusion** | ResNet-50 | **36.0** | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1nghqP5itCInttxIk15oqjA?pwd=PAMI) (code: PAMI) |
+
+
+
+
+
 ### **Panoptic Segmentation**
 
 | Panoptic FPN          | Backbone | Params (M) | PQ       | PQ<sup>th</sup> | PQ<sup>st</sup> | SQ       | RQ       |
@@ -211,6 +229,24 @@ Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here]() (mmdet==2.28.1)
 | Nearest               | *R101*   | 65.0       | 42.2     | 50.1            | 30.3            | 78.3     | 51.4     |
 | DySample+             | *R101*   | +49.2K     | 43.0     | 50.2            | 32.1            | 78.6     | 52.4     |
 | **FreqFusion** (Ours) | *R101*   | +0.3       | **44.0** | **50.8**        | **33.7**        | **79.4** | **53.4** |
+
+
+
+
+
+Checkpoint:
+
+| Panoptic FPN   | Backbone  | PQ       | Configs                                                      | Links                                                        |
+| -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **FreqFusion** | ResNet-50 | **42.7** | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1nghqP5itCInttxIk15oqjA?pwd=PAMI) (code: PAMI) |
+
+
+
+Note:
+
+Original code of mmdet can be found [here](https://github.com/open-mmlab/mmdetection/tree/dev-2.x).
+
+
 
 
 
