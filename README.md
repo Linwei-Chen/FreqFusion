@@ -134,7 +134,7 @@ For more details on installing and using Mask2Former, please refer to the [READM
 
 ### Object Detection
 
-Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here]() (mmdet==2.28.1)
+Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here](./mmdetection) (mmdet==2.28.1)
 
 | Faster R-CNN（Detection） | Backbone | AP       |
 | ------------------------- | -------- | -------- |
