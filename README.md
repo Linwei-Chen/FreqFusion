@@ -113,8 +113,8 @@ Checkpoint:
 
 | Mask2Former | Backbone | mIoU            | Configs | Links |
 | ---------------------- | -------- | --------------- | ---------------------- | ---------------------- |
-| **FreqFusion**  | Swin-B   | **55.7** (55.3 in paper) | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) |  |
-| **FreqFusion**  | Swin-L   | **57.0** (56.8 in paper) | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_large_IN21k_384_bs16_160k_res640.yaml) |  |
+| **FreqFusion**  | Swin-B   | **55.7** (55.3 in paper) | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1wRAwAUsGT3S0MEWhPGeguA?pwd=PAMI) (code: PAMI) |
+| **FreqFusion**  | Swin-L   | **57.0** (56.8 in paper) | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_large_IN21k_384_bs16_160k_res640.yaml) |  [ckpt](https://pan.baidu.com/s/1EXqVl99hn6YYPeeEnT_gXQ?pwd=PAMI) (code: PAMI)|
 
 
 
@@ -232,8 +232,6 @@ Checkpoint:
 
 
 
-
-
 Checkpoint:
 
 | Panoptic FPN   | Backbone  | PQ       | Configs                                                      | Links                                                        |
@@ -246,7 +244,7 @@ Note:
 
 Original code of mmdet can be found [here](https://github.com/open-mmlab/mmdetection/tree/dev-2.x).
 
-
+For more details on installing and using mmdetection, please refer to the [README](./mmdetection/README.md) file.
 
 
 
