@@ -264,7 +264,11 @@ class LocalSimGuidedSampler(nn.Module):
         else: raise NotImplementedError
         normal_init(self.offset, std=0.001)
         if use_direct_scale:
-            self.direct_scale = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            if self.direction_feat == 'sim':
+                self.direct_scale = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            elif self.direction_feat == 'sim_concat':
+                self.direct_scale = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            else: raise NotImplementedError
             constant_init(self.direct_scale, val=0.)
 
         out_channels = 2 * groups
@@ -276,9 +280,12 @@ class LocalSimGuidedSampler(nn.Module):
         normal_init(self.hr_offset, std=0.001)
         
         if use_direct_scale:
-            self.hr_direct_scale = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            if self.direction_feat == 'sim':
+                self.hr_direct_scale = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            elif self.direction_feat == 'sim_concat':
+                self.hr_direct_scale = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            else: raise NotImplementedError
             constant_init(self.hr_direct_scale, val=0.)
-
         self.norm = norm
         if self.norm:
             self.norm_hr = nn.GroupNorm(in_channels // 8, in_channels)
@@ -317,7 +324,7 @@ class LocalSimGuidedSampler(nn.Module):
         elif self.direction_feat == 'sim_concat':
             hr_sim = torch.cat([hr_x, compute_similarity(hr_x, self.local_window, dilation=2, sim='cos')], dim=1)
             lr_sim = torch.cat([lr_x, compute_similarity(lr_x, self.local_window, dilation=2, sim='cos')], dim=1)
-            # hr_x, lr_x = hr_sim, lr_sim
+            hr_x, lr_x = hr_sim, lr_sim
         # offset = self.get_offset(hr_x, lr_x)
         offset = self.get_offset_lp(hr_x, lr_x, hr_sim, lr_sim)
         return self.sample(feat2sample, offset)
@@ -326,8 +333,8 @@ class LocalSimGuidedSampler(nn.Module):
     def get_offset_lp(self, hr_x, lr_x, hr_sim, lr_sim):
         if hasattr(self, 'direct_scale'):
             # offset = (self.offset(lr_x) + F.pixel_unshuffle(self.hr_offset(hr_x), self.scale)) * (self.direct_scale(lr_x) + F.pixel_unshuffle(self.hr_direct_scale(hr_x), self.scale)).sigmoid() + self.init_pos
-            # offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.direct_scale(lr_x) + F.pixel_unshuffle(self.hr_direct_scale(hr_x), self.scale)).sigmoid() + self.init_pos
-            offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.direct_scale(lr_sim) + F.pixel_unshuffle(self.hr_direct_scale(hr_sim), self.scale)).sigmoid() + self.init_pos
+            offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.direct_scale(lr_x) + F.pixel_unshuffle(self.hr_direct_scale(hr_x), self.scale)).sigmoid() + self.init_pos
+            # offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.direct_scale(lr_sim) + F.pixel_unshuffle(self.hr_direct_scale(hr_sim), self.scale)).sigmoid() + self.init_pos
         else:
             offset =  (self.offset(lr_x) + F.pixel_unshuffle(self.hr_offset(hr_x), self.scale)) * 0.25 + self.init_pos
         return offset

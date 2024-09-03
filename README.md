@@ -26,7 +26,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ### FreqFusion
 
-The individual code of FreqFusion is at [here](./FreqFusion.py). The usage is very simple.
+The individual code for **FreqFusion** is available [here](https://kimi.moonshot.cn/chat/FreqFusion.py). **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very straightforward.
 
 ```python
 m = FreqFusion(hr_channels=64, lr_channels=64)
@@ -35,7 +35,7 @@ lr_feat = torch.rand(1, 64, 16, 16)
 _, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat)
 ```
 
-The FreqFusion rely on mmcv libarary, you can install mmcv-full by: 
+The **FreqFusion** relies on mmcv libarary, you can install mmcv-full by: 
 
 ```
 pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
@@ -48,10 +48,24 @@ pip install mmcv-full==1.5.3 -f https://download.openmmlab.com/mmcv/dist/cu113/t
 
 #### SegNeXt
 
+Code of [SegNeXt](./SegNeXt)
+
+Core modification: 
+
+[FreqFusion.py](./FreqFusion/SegNeXt/mmseg/models/decode_heads/FreqFusion.py)
+
+[ham_head.py](./SegNeXt/mmseg/models/decode_heads/ham_head.py)
+
 | Method               | Backbone | Crop Size | Lr Schd | mIoU     |
 | -------------------- | -------- | --------- | ------- | -------- |
 | SegNeXt              | MSCAN-T  | 512x512   | 160k    | 41.1     |
 | SegNeXt + FreqFusion | MSCAN-T  | 512x512   | 160k    | **43.5** |
+
+Checkpoint:
+
+| Method               | Backbone | mIoU                     | Configs                                                      | Links |
+| -------------------- | -------- | ------------------------ | ------------------------------------------------------------ | ----- |
+| SegNeXt + FreqFusion | MSCAN-T  | **43.7** (43.5 in paper) | [config](./SegNeXt/local_configs/segnext/tiny/segnext.tiny.freqfusion.512x512.ade.160k.py) |       |
 
 
 
