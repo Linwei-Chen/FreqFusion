@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from mmcv.ops.carafe import normal_init, xavier_init, carafe
 from torch.utils.checkpoint import checkpoint
 import warnings
+import numpy as np
 
 def normal_init(module, mean=0, std=1, bias=0):
     if hasattr(module, 'weight') and module.weight is not None:
@@ -41,12 +42,32 @@ def resize(input,
                         f'out size {(output_h, output_w)} is `nx+1`')
     return F.interpolate(input, size, scale_factor, mode, align_corners)
 
+def hamming2D(M, N):
+    """
+    生成二维Hamming窗
+
+    参数：
+    - M：窗口的行数
+    - N：窗口的列数
+
+    返回：
+    - 二维Hamming窗
+    """
+    # 生成水平和垂直方向上的Hamming窗
+    # hamming_x = np.blackman(M)
+    # hamming_x = np.kaiser(M)
+    hamming_x = np.hamming(M)
+    hamming_y = np.hamming(N)
+    # 通过外积生成二维Hamming窗
+    hamming_2d = np.outer(hamming_x, hamming_y)
+    return hamming_2d
+
 class FreqFusion(nn.Module):
     def __init__(self,
                 hr_channels,
                 lr_channels,
                 scale_factor=1,
-                lowpass_kernel=5, 
+                lowpass_kernel=5,
                 highpass_kernel=3,
                 up_group=1,
                 encoder_kernel=3,
@@ -60,9 +81,12 @@ class FreqFusion(nn.Module):
                 use_high_pass=True,
                 use_low_pass=True,
                 hr_residual=True,
-                semi_conv=False,
+                semi_conv=True,
+                hamming_window=True, # for regularization, do not matter really
+                feature_resample_norm=True,
                 **kwargs):
         super().__init__()
+        # print(self)
         self.scale_factor = scale_factor
         self.lowpass_kernel = lowpass_kernel
         self.highpass_kernel = highpass_kernel
@@ -89,7 +113,7 @@ class FreqFusion(nn.Module):
         self.feature_resample = feature_resample
         self.comp_feat_upsample = comp_feat_upsample
         if self.feature_resample:
-            self.dysampler = LocalSimGuidedSampler(in_channels=compressed_channels, scale=2, style='lp', groups=feature_resample_group, sim_direction=True, kernel_size=encoder_kernel)
+            self.dysampler = LocalSimGuidedSampler(in_channels=compressed_channels, scale=2, style='lp', groups=feature_resample_group, use_direct_scale=True, kernel_size=encoder_kernel, norm=feature_resample_norm)
         if self.use_high_pass:
             self.content_encoder2 = nn.Conv2d( # AHPF generator
                 self.compressed_channels,
@@ -98,6 +122,15 @@ class FreqFusion(nn.Module):
                 padding=int((self.encoder_kernel - 1) * self.encoder_dilation / 2),
                 dilation=self.encoder_dilation,
                 groups=1)
+        self.hamming_window = hamming_window
+        lowpass_pad=0
+        highpass_pad=0
+        if self.hamming_window:
+            self.register_buffer('hamming_lowpass', torch.FloatTensor(hamming2D(lowpass_kernel + 2 * lowpass_pad, lowpass_kernel + 2 * lowpass_pad))[None, None,])
+            self.register_buffer('hamming_highpass', torch.FloatTensor(hamming2D(highpass_kernel + 2 * highpass_pad, highpass_kernel + 2 * highpass_pad))[None, None,])
+        else:
+            self.register_buffer('hamming_lowpass', torch.FloatTensor([1.0]))
+            self.register_buffer('hamming_highpass', torch.FloatTensor([1.0]))
         self.init_weights()
 
     def init_weights(self):
@@ -109,14 +142,26 @@ class FreqFusion(nn.Module):
         if self.use_high_pass:
             normal_init(self.content_encoder2, std=0.001)
 
-    def kernel_normalizer(self, mask, kernel, scale_factor=None):
+    def kernel_normalizer(self, mask, kernel, scale_factor=None, hamming=1):
         if scale_factor is not None:
             mask = F.pixel_shuffle(mask, self.scale_factor)
         n, mask_c, h, w = mask.size()
         mask_channel = int(mask_c / float(kernel**2))
+        # mask = mask.view(n, mask_channel, -1, h, w)
+        # mask = F.softmax(mask, dim=2, dtype=mask.dtype)
+        # mask = mask.view(n, mask_c, h, w).contiguous()
+
         mask = mask.view(n, mask_channel, -1, h, w)
         mask = F.softmax(mask, dim=2, dtype=mask.dtype)
-        mask = mask.view(n, mask_c, h, w).contiguous()
+        mask = mask.view(n, mask_channel, kernel, kernel, h, w)
+        mask = mask.permute(0, 1, 4, 5, 2, 3).view(n, -1, kernel, kernel)
+        # mask = F.pad(mask, pad=[padding] * 4, mode=self.padding_mode) # kernel + 2 * padding
+        mask = mask * hamming
+        mask /= mask.sum(dim=(-1, -2), keepdims=True)
+        # print(hamming)
+        # print(mask.shape)
+        mask = mask.view(n, mask_channel, h, w, -1)
+        mask =  mask.permute(0, 1, 4, 2, 3).view(n, -1, h, w).contiguous()
         return mask
 
     def forward(self, hr_feat, lr_feat, use_checkpoint=False):
@@ -132,17 +177,18 @@ class FreqFusion(nn.Module):
             if self.comp_feat_upsample:
                 if self.use_high_pass:
                     mask_hr_hr_feat = self.content_encoder2(compressed_hr_feat)
-                    mask_hr_init = self.kernel_normalizer(mask_hr_hr_feat, self.highpass_kernel)
+                    mask_hr_init = self.kernel_normalizer(mask_hr_hr_feat, self.highpass_kernel, hamming=self.hamming_highpass)
                     compressed_hr_feat = compressed_hr_feat + compressed_hr_feat - carafe(compressed_hr_feat, mask_hr_init, self.highpass_kernel, self.up_group, 1)
                     
                     mask_lr_hr_feat = self.content_encoder(compressed_hr_feat)
-                    mask_lr_init = self.kernel_normalizer(mask_lr_hr_feat, self.lowpass_kernel)
+                    mask_lr_init = self.kernel_normalizer(mask_lr_hr_feat, self.lowpass_kernel, hamming=self.hamming_lowpass)
+                    
                     mask_lr_lr_feat_lr = self.content_encoder(compressed_lr_feat)
                     mask_lr_lr_feat = F.interpolate(
                         carafe(mask_lr_lr_feat_lr, mask_lr_init, self.lowpass_kernel, self.up_group, 2), size=compressed_hr_feat.shape[-2:], mode='nearest')
                     mask_lr = mask_lr_hr_feat + mask_lr_lr_feat
 
-                    mask_lr_init = self.kernel_normalizer(mask_lr, self.lowpass_kernel)
+                    mask_lr_init = self.kernel_normalizer(mask_lr, self.lowpass_kernel, hamming=self.hamming_lowpass)
                     mask_hr_lr_feat = F.interpolate(
                         carafe(self.content_encoder2(compressed_lr_feat), mask_lr_init, self.lowpass_kernel, self.up_group, 2), size=compressed_hr_feat.shape[-2:], mode='nearest')
                     mask_hr = mask_hr_hr_feat + mask_hr_lr_feat
@@ -157,7 +203,7 @@ class FreqFusion(nn.Module):
             if self.use_high_pass: 
                 mask_hr = self.content_encoder2(compressed_x)
         
-        mask_lr = self.kernel_normalizer(mask_lr, self.lowpass_kernel)
+        mask_lr = self.kernel_normalizer(mask_lr, self.lowpass_kernel, hamming=self.hamming_lowpass)
         if self.semi_conv:
                 lr_feat = carafe(lr_feat, mask_lr, self.lowpass_kernel, self.up_group, 2)
         else:
@@ -169,7 +215,7 @@ class FreqFusion(nn.Module):
             lr_feat = carafe(lr_feat, mask_lr, self.lowpass_kernel, self.up_group, 1)
 
         if self.use_high_pass:
-            mask_hr = self.kernel_normalizer(mask_hr, self.highpass_kernel)
+            mask_hr = self.kernel_normalizer(mask_hr, self.highpass_kernel, hamming=self.hamming_highpass)
             if self.hr_residual:
                 # print('using hr_residual')
                 hr_feat_hf = hr_feat - carafe(hr_feat, mask_hr, self.highpass_kernel, self.up_group, 1)
@@ -177,7 +223,8 @@ class FreqFusion(nn.Module):
             else:
                 hr_feat = hr_feat_hf
 
-        if self.feature_resample: # 'dyupsample'
+        if self.feature_resample:
+            # print(lr_feat.shape)
             lr_feat = self.dysampler(hr_x=compressed_hr_feat, 
                                      lr_x=compressed_lr_feat, feat2sample=lr_feat)
                 
@@ -189,7 +236,7 @@ class LocalSimGuidedSampler(nn.Module):
     """
     offset generator in FreqFusion
     """
-    def __init__(self, in_channels, scale=2, style='lp', groups=4, sim_direction=True, kernel_size=1, local_window=3, sim_type='cos', norm=True, direction_feat='sim'):
+    def __init__(self, in_channels, scale=2, style='lp', groups=4, use_direct_scale=True, kernel_size=1, local_window=3, sim_type='cos', norm=True, direction_feat='sim_concat'):
         super().__init__()
         assert scale==2
         assert style=='lp'
@@ -216,9 +263,9 @@ class LocalSimGuidedSampler(nn.Module):
             self.offset = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
         else: raise NotImplementedError
         normal_init(self.offset, std=0.001)
-        if sim_direction:
-            self.sim_direct = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
-            constant_init(self.sim_direct, val=0.)
+        if use_direct_scale:
+            self.direct_scale = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            constant_init(self.direct_scale, val=0.)
 
         out_channels = 2 * groups
         if self.direction_feat == 'sim':
@@ -228,9 +275,9 @@ class LocalSimGuidedSampler(nn.Module):
         else: raise NotImplementedError
         normal_init(self.hr_offset, std=0.001)
         
-        if sim_direction:
-            self.hr_sim_direct = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
-            constant_init(self.sim_direct, val=0.)
+        if use_direct_scale:
+            self.hr_direct_scale = nn.Conv2d(in_channels + local_window**2 - 1, out_channels, kernel_size=kernel_size, padding=kernel_size//2)
+            constant_init(self.hr_direct_scale, val=0.)
 
         self.norm = norm
         if self.norm:
@@ -277,9 +324,10 @@ class LocalSimGuidedSampler(nn.Module):
     
     # def get_offset_lp(self, hr_x, lr_x):
     def get_offset_lp(self, hr_x, lr_x, hr_sim, lr_sim):
-        if hasattr(self, 'sim_direct'):
-            # offset = (self.offset(lr_x) + F.pixel_unshuffle(self.hr_offset(hr_x), self.scale)) * (self.sim_direct(lr_x) + F.pixel_unshuffle(self.hr_sim_direct(hr_x), self.scale)).sigmoid() + self.init_pos
-            offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.sim_direct(lr_x) + F.pixel_unshuffle(self.hr_sim_direct(hr_x), self.scale)).sigmoid() + self.init_pos
+        if hasattr(self, 'direct_scale'):
+            # offset = (self.offset(lr_x) + F.pixel_unshuffle(self.hr_offset(hr_x), self.scale)) * (self.direct_scale(lr_x) + F.pixel_unshuffle(self.hr_direct_scale(hr_x), self.scale)).sigmoid() + self.init_pos
+            # offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.direct_scale(lr_x) + F.pixel_unshuffle(self.hr_direct_scale(hr_x), self.scale)).sigmoid() + self.init_pos
+            offset = (self.offset(lr_sim) + F.pixel_unshuffle(self.hr_offset(hr_sim), self.scale)) * (self.direct_scale(lr_sim) + F.pixel_unshuffle(self.hr_direct_scale(hr_sim), self.scale)).sigmoid() + self.init_pos
         else:
             offset =  (self.offset(lr_x) + F.pixel_unshuffle(self.hr_offset(hr_x), self.scale)) * 0.25 + self.init_pos
         return offset

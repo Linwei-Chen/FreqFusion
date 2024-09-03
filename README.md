@@ -22,9 +22,42 @@ Dense image prediction tasks demand features with strong category information an
 
 <img src="README.assets/image-20240831173922305.png" alt="图片描述" width="918">
 
-## Code Usage
 
-### Installation (TODO)
+
+### FreqFusion
+
+The individual code of FreqFusion is at [here](./FreqFusion.py). The usage is very simple.
+
+```python
+m = FreqFusion(hr_channels=64, lr_channels=64)
+hr_feat = torch.rand(1, 64, 32, 32)
+lr_feat = torch.rand(1, 64, 16, 16)
+_, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat)
+```
+
+The FreqFusion rely on mmcv libarary, you can install mmcv-full by: 
+
+```
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
+pip install mmcv-full==1.5.3 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11/index.html
+```
+
+
+
+### Semantic Segmentation
+
+#### SegNeXt
+
+| Method               | Backbone | Crop Size | Lr Schd | mIoU     |
+| -------------------- | -------- | --------- | ------- | -------- |
+| SegNeXt              | MSCAN-T  | 512x512   | 160k    | 41.1     |
+| SegNeXt + FreqFusion | MSCAN-T  | 512x512   | 160k    | **43.5** |
+
+
+
+#### Code Usage
+
+#### Installation (TODO)
 
 Our code is based on [MMSegmentation](https://github.com/open-mmlab/mmsegmentation). You can install mmseg by:
 
@@ -43,18 +76,15 @@ pip install mmcv-full==1.5.3 -f https://download.openmmlab.com/mmcv/dist/cu113/t
 
 
 
-### Results
-
-#### Semantic Segmentation
-
-
-
-| Method               | Backbone | Crop Size | Lr Schd | mIoU     |
-| -------------------- | -------- | --------- | ------- | -------- |
-| SegNeXt              | MSCAN-T  | 512x512   | 160k    | 41.1     |
-| SegNeXt + FreqFusion | MSCAN-T  | 512x512   | 160k    | **43.5** |
+#### Mask2Former
 
 [Code of Mask2Former](./Mask2Former)
+
+Core modification: 
+
+[FreqFusion.py](./Mask2Former/mask2former/modeling/pixel_decoder/FreqFusion.py)
+
+[msdeformattn.py](./Mask2Former/mask2former/modeling/pixel_decoder/msdeformattn.py)
 
 | Mask2Former           | Backbone | mIoU            |
 | --------------------- | -------- | --------------- |
@@ -86,7 +116,9 @@ See [installation instructions](https://github.com/facebookresearch/Mask2Former/
 
 
 
-#### Object Detection
+### Object Detection
+
+Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here]() (mmdet==2.28.1)
 
 | Faster R-CNN（Detection） | Backbone | AP       |
 | ------------------------- | -------- | -------- |
@@ -107,7 +139,7 @@ See [installation instructions](https://github.com/facebookresearch/Mask2Former/
 
 
 
-#### **Instance Segmentation**
+### **Instance Segmentation**
 
 | Mask RCNN (Detection)                | Backbone | Mask AP  |
 | --------------------- | -------- | -------- |
@@ -147,7 +179,7 @@ See [installation instructions](https://github.com/facebookresearch/Mask2Former/
 
 
 
-#### **Panoptic Segmentation**
+### **Panoptic Segmentation**
 
 | Panoptic FPN          | Backbone | Params (M) | PQ       | PQ<sup>th</sup> | PQ<sup>st</sup> | SQ       | RQ       |
 | --------------------- | -------- | ---------- | -------- | --------------- | --------------- | -------- | -------- |
@@ -168,15 +200,9 @@ See [installation instructions](https://github.com/facebookresearch/Mask2Former/
 
 
 
-Note:
-
-The config can be found at [here]().
-
-(TODO)
-
 ## Acknowledgment
 
-This code is built using [mmsegmentation](https://github.com/open-mmlab/mmsegmentation) libraries.
+This code is built using [mmsegmentation](https://github.com/open-mmlab/mmsegmentation), [Mask2Former](https://github.com/facebookresearch/Mask2Former), [mmdetection](https://github.com/open-mmlab/mmdetection/tree/dev-2.x) libraries.
 
 ## Contact
 
