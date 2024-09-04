@@ -155,9 +155,9 @@ Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here](./mmdetection) (mmdet==2
 
 Checkpoint:
 
-| Faster R-CNN   | Backbone  | Mask AP                  | Configs                                                      | Links                                                        |
+| Faster R-CNN   | Backbone  | Box AP                   | Configs                                                      | Links                                                        |
 | -------------- | --------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FreqFusion** | ResNet-50 | **39.5 **(39.4 in paper) | [config](./mmdetection/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
+| **FreqFusion** | ResNet-50 | **39.5** (39.4 in paper) | [config](./mmdetection/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
 
 
 
