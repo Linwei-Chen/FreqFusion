@@ -17,7 +17,7 @@ model = dict(
         feature_resample=True,
         semi_conv=True,
         feature_resample_group=4,
-        feature_resample_norm=True,
+        feature_resample_norm=False,
     ),
     semantic_head=dict(
         type='PanopticFPNHead',

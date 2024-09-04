@@ -163,41 +163,22 @@ Checkpoint:
 
 ### **Instance Segmentation**
 
-| Mask RCNN (Detection)                | Backbone | Mask AP  |
-| --------------------- | -------- | -------- |
-| Nearest               | R50      | 38.3     |
-| Deconv                | R50      | 37.9     |
-| PixelShuffle          | R50      | 38.5     |
-| CARAFE                | R50      | 39.2     |
-| IndexNet              | R50      | 38.4     |
-| A2U                   | R50      | 38.2     |
-| FADE                  | R50      | 39.1     |
-| SAPA-B                | R50      | 38.7     |
-| DySample-S+           | R50      | 39.3     |
-| DySample+             | R50      | 39.6     |
-| **FreqFusion (Ours)** | R50      | **40.0** |
-| Nearest               | *R101*   | 40.0     |
-| DySample+             | *R101*   | 41.0     |
-| **FreqFusion (Ours)** | *R101*   | **41.6** |
-
-
-
-| Mask RCNN (Instance Seg) | Backbone | Mask AP  |
-| ------------------------ | -------- | -------- |
-| Nearest                  | R50      | 34.7     |
-| Deconv                   | R50      | 34.5     |
-| PixelShuffle             | R50      | 34.8     |
-| CARAFE                   | R50      | 35.4     |
-| IndexNet                 | R50      | 34.7     |
-| A2U                      | R50      | 34.6     |
-| FADE                     | R50      | 35.1     |
-| SAPA-B                   | R50      | 35.1     |
-| DySample-S+              | R50      | 35.5     |
-| DySample+                | R50      | 35.7     |
-| **FreqFusion (Ours)**    | R50      | **36.0** |
-| Nearest                  | *R101*   | 36.0     |
-| DySample+                | *R101*   | 36.8     |
-| **FreqFusion (Ours)**    | *R101*   | **37.4** |
+| Model                 | Backbone | Box AP   | Mask AP  |
+| --------------------- | -------- | -------- | -------- |
+| Nearest               | R50      | 38.3     | 34.7     |
+| Deconv                | R50      | 37.9     | 34.5     |
+| PixelShuffle          | R50      | 38.5     | 34.8     |
+| CARAFE                | R50      | 39.2     | 35.4     |
+| IndexNet              | R50      | 38.4     | 34.7     |
+| A2U                   | R50      | 38.2     | 34.6     |
+| FADE                  | R50      | 39.1     | 35.1     |
+| SAPA-B                | R50      | 38.7     | 35.1     |
+| DySample-S+           | R50      | 39.3     | 35.5     |
+| DySample+             | R50      | 39.6     | 35.7     |
+| **FreqFusion (Ours)** | R50      | **40.0** | **36.0** |
+| Nearest               | *R101*   | 40.0     | 36.0     |
+| DySample+             | *R101*   | 41.0     | 36.8     |
+| **FreqFusion (Ours)** | *R101*   | **41.6** | **37.4** |
 
 
 
@@ -236,7 +217,7 @@ Checkpoint:
 
 | Panoptic FPN   | Backbone  | PQ       | Configs                                                      | Links                                                        |
 | -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FreqFusion** | ResNet-50 | **42.7** | [config](./Mask2Former/configs/ade20k/semantic-segmentation/swin/maskformer2_FreqAware_swin_base_IN21k_384_bs16_160k_res640.yaml) | [ckpt](https://pan.baidu.com/s/1nghqP5itCInttxIk15oqjA?pwd=PAMI) (code: PAMI) |
+| **FreqFusion** | ResNet-50 | **42.7** | [config](./mmdetection/configs/panoptic_fpn/panoptic_fpn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1wkMt75sT9UoRc9ymBrj93g?pwd=PAMI) (code: PAMI) |
 
 
 
@@ -246,7 +227,21 @@ Original code of mmdet can be found [here](https://github.com/open-mmlab/mmdetec
 
 For more details on installing and using mmdetection, please refer to the [README](./mmdetection/README.md) file.
 
+## Citation
 
+If you use our dataset or code for research, please cite this paper (early access now): 
+
+```
+@ARTICLE{10648934,
+  author={Chen, Linwei and Fu, Ying and Gu, Lin and Yan, Chenggang and Harada, Tatsuya and Huang, Gao},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={Frequency-aware Feature Fusion for Dense Image Prediction}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-18},
+  doi={10.1109/TPAMI.2024.3449959}}
+```
 
 ## Acknowledgment
 
