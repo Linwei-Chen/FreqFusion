@@ -232,13 +232,13 @@ For more details on installing and using mmdetection, please refer to the [READM
 If you use our dataset or code for research, please cite this paper (early access now): 
 
 ```
-@ARTICLE{10648934,
+@ARTICLE{2024freqfusion,
   author={Chen, Linwei and Fu, Ying and Gu, Lin and Yan, Chenggang and Harada, Tatsuya and Huang, Gao},
   journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
   title={Frequency-aware Feature Fusion for Dense Image Prediction}, 
   year={2024},
-  volume={},
-  number={},
+  volume={1},
+  number={1},
   pages={1-18},
   doi={10.1109/TPAMI.2024.3449959}}
 ```
