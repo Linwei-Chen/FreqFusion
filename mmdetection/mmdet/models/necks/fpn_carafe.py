@@ -283,11 +283,6 @@ from .FreqFusion import FreqFusion
 @NECKS.register_module()
 class FreqFusionCARAFEFPN(FPN_CARAFE):
     def __init__(self, 
-                # align_corners=False, 
-                # use_freq_domain=False, 
-                # log_dir=None,
-                # upsample_mode='nearest',
-                # use_encoder2=False,
                 use_high_pass=True,
                 use_low_pass=True,
                 lowpass_kernel=5,
@@ -296,30 +291,13 @@ class FreqFusionCARAFEFPN(FPN_CARAFE):
                 semi_conv=True,
                 feature_resample=False, ###
                 feature_resample_group=8, ###
-                # use_dyedgeconv=False,
                 comp_feat_upsample=True,
                 feature_resample_norm=True,
-                # hf_att=False,
                 **kwargs):
         super().__init__(**kwargs)
-        # self.log_dir = log_dir
-        # self.writer = SummaryWriter(log_dir)
         del self.upsample_modules
         self.alignment = nn.ModuleList()
         for i in range(self.start_level, self.backbone_end_level):
-            # self.alignment.append(DyHPFusion(in_channels=self.out_channels * 2, kernel_size=3, upsample_mode=upsample_mode, align_corners=align_corners))
-            # self.alignment.append(FreqFusion2encoder(hr_channels=self.out_channels, lr_channels=self.out_channels, 
-            #                                          scale_factor=1, lowpass_kernel=lowpass_kernel, highpass_kernel=highpass_kernel, up_group=1, 
-            #                                         upsample_mode='nearest', align_corners=False,
-            #                                         feature_resample=feature_resample,
-            #                                         feature_resample_group=feature_resample_group,
-            #                                         hr_residual=True, 
-            #                                         hf_att=hf_att,
-            #                                         comp_feat_upsample=comp_feat_upsample,
-            #                                         use_dyedgeconv=use_dyedgeconv,
-            #                                         use_spatial_suppression=False, use_spatial_residual=False, 
-            #                                         compressed_channels= (self.out_channels + self.out_channels) // compress_ratio,
-            #                                         use_high_pass=use_high_pass, use_low_pass=use_low_pass, semi_conv=semi_conv, use_spatial_gate=False))
             self.alignment.append(FreqFusion(hr_channels=self.out_channels, lr_channels=self.out_channels, 
                                             scale_factor=1, lowpass_kernel=lowpass_kernel, highpass_kernel=highpass_kernel, up_group=1, 
                                             upsample_mode='nearest', align_corners=False,
@@ -336,7 +314,7 @@ class FreqFusionCARAFEFPN(FPN_CARAFE):
             if isinstance(m, (nn.Conv2d, nn.ConvTranspose2d)):
                 xavier_init(m, distribution='uniform')
         for m in self.modules():
-            if isinstance(m, FreqFusion2encoder):
+            if isinstance(m, FreqFusion):
                 m.init_weights()
 
     # @auto_fp16()
