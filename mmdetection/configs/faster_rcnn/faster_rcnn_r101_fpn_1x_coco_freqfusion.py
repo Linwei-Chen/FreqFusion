@@ -5,7 +5,7 @@ _base_ = [
 ]
 
 data = dict(
-    samples_per_gpu=8,
+    samples_per_gpu=4,
     workers_per_gpu=8,
 )
 
@@ -14,42 +14,19 @@ model = dict(
     backbone=dict(
         depth=101,
         init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet101'),
-        # type='ResNet',
-        # depth=50,
-        # num_stages=4,
-        # out_indices=(0, 1, 2, 3),
-        # frozen_stages=1,
-        # norm_cfg=dict(type='BN', requires_grad=True),
-        # norm_eval=True,
-        # style='pytorch',
-        with_cp=True,
-        # frozen_stages=0,
-        # dcn=dict( 
-            #在最后三个block加入可变形卷积 
-            # type='DCNv2',
-            # type='DCN_AS',
-            # radius=3,
-            # type='DCN_AS_DFDC',
-            # type='DFDC_Conv2D',
-            # type='ODFDC_Conv2D',
-            # deformable_groups=1, fallback_on_stride=False),
-        # stage_with_dcn=(True, True, True, True),
+        # with_cp=True,
     ),
         neck=dict(
-        # type='FreqFusionFPN',
         type='FreqFusionCARAFEFPN',
         use_high_pass=True,
         use_low_pass=True,
         lowpass_kernel=5,
         highpass_kernel=3,
         compress_ratio=8,
-        feature_align=True,
-        feature_align_group=8,
+        feature_resample=True,
         semi_conv=True,
-    #     type='FaPNOri',
-    #     deform_groups=8,
-    #     use_adaptive_sampling=False,
-    #     radius=3,
+        feature_resample_group=8, ### 4 or 8
+        feature_resample_norm=True,
     )
 )
 
@@ -80,9 +57,3 @@ test_pipeline = [
             dict(type='Collect', keys=['img']),
         ])
 ]
-data = dict(
-    samples_per_gpu=8,
-    workers_per_gpu=8,
-    train=dict(pipeline=train_pipeline),
-    val=dict(pipeline=test_pipeline),
-    test=dict(pipeline=test_pipeline))

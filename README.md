@@ -155,9 +155,10 @@ Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here](./mmdetection) (mmdet==2
 
 Checkpoint:
 
-| Faster R-CNN   | Backbone  | Box AP                   | Configs                                                      | Links                                                        |
-| -------------- | --------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FreqFusion** | ResNet-50 | **39.5** (39.4 in paper) | [config](./mmdetection/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
+| Faster R-CNN   | Backbone   | Box AP                   | Configs                                                      | Links                                                        |
+| -------------- | ---------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **FreqFusion** | ResNet-50  | **39.5** (39.4 in paper) | [config](./mmdetection/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1b8J0E5RCSXEVNkF-hnTfNA?pwd=PAMI) (code: PAMI) |
+| **FreqFusion** | ResNet-101 | **41.1** (41.0 in paper) | [config](./mmdetection/configs/faster_rcnn/faster_rcnn_r101_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1hGqON9ma4XgZKHZ0HJ8z1w?pwd=PAMI) (code: PAMI) |
 
 
 
@@ -187,6 +188,7 @@ Checkpoint:
 | Mask R-CNN     | Backbone  | Mask AP  | Configs                                                      | Links                                                        |
 | -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | **FreqFusion** | ResNet-50 | **36.0** | [config](./mmdetection/configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1nghqP5itCInttxIk15oqjA?pwd=PAMI) (code: PAMI) |
+| **FreqFusion** | ResNet-50 | **37.3** | [config](./mmdetection/configs/mask_rcnn/mask_rcnn_r101_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1z_Q6ynzylE2E59Lug46izg?pwd=PAMI) (code: PAMI) |
 
 
 
@@ -215,9 +217,10 @@ Checkpoint:
 
 Checkpoint:
 
-| Panoptic FPN   | Backbone  | PQ       | Configs                                                      | Links                                                        |
-| -------------- | --------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FreqFusion** | ResNet-50 | **42.7** | [config](./mmdetection/configs/panoptic_fpn/panoptic_fpn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1wkMt75sT9UoRc9ymBrj93g?pwd=PAMI) (code: PAMI) |
+| Panoptic FPN   | Backbone  | PQ                       | Configs                                                      | Links                                                        |
+| -------------- | --------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **FreqFusion** | ResNet-50 | **42.7**                 | [config](./mmdetection/configs/panoptic_fpn/panoptic_fpn_r50_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1wkMt75sT9UoRc9ymBrj93g?pwd=PAMI) (code: PAMI) |
+| **FreqFusion** | ResNet-50 | **44.1** (44.0 in paper) | [config](./mmdetection/configs/panoptic_fpn/panoptic_fpn_r101_fpn_1x_coco_freqfusion.py) | [ckpt](https://pan.baidu.com/s/1OIRWPNALwqf5DtKGt2RoYA?pwd=PAMI) (code: PAMI) |
 
 
 
