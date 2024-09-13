@@ -2,14 +2,6 @@ _base_ = './panoptic_fpn_r50_fpn_1x_coco.py'
 model = dict(
     type='PanopticFPN',
     backbone=dict(
-        # type='ResNet',
-        # depth=50,
-        # num_stages=4,
-        # out_indices=(0, 1, 2, 3),
-        # frozen_stages=1,
-        # norm_cfg=dict(type='BN', requires_grad=True),
-        # norm_eval=True,
-        # style='pytorch',
         # with_cp=True,
         depth=101,
         init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet101'),
@@ -24,7 +16,7 @@ model = dict(
         feature_resample=True,
         semi_conv=True,
         feature_resample_group=4,
-        feature_resample_norm=False,
+        feature_resample_norm=True,
     ),
     semantic_head=dict(
         type='PanopticFPNHead',
