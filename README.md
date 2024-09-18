@@ -18,13 +18,23 @@ Dense image prediction tasks demand features with strong category information an
 - We propose FreqFusion, which addresses category inconsistency and boundary displacement by adaptively smoothing the high-level feature with spatial-variant low-pass filters, resampling nearby category-consistent features to replace inconsistent features in the high-level feature, and enhancing the high frequency of lower-level features.
 - Qualitative and quantitative results demonstrate that FreqFusion increases intra-category similarity and similarity margin, leading to a consistent and considerable improvement across various tasks, including semantic segmentation, object detection, instance segmentation, and panoptic segmentation.
 
+![introv2](README.assets/introv2.png)
 
+
+
+## Method Overview💡
 
 <img src="README.assets/image-20240831173922305.png" alt="图片描述" width="918">
 
 
 
-### FreqFusion
+## Visualization👀
+
+![feature_sim_vis](README.assets/feature_sim_vis.png)
+
+![feat_fusion_vis](README.assets/feat_fusion_vis.png)
+
+### FreqFusion Usage
 
 The clean code for **FreqFusion** is available [here](https://github.com/Linwei-Chen/FreqFusion/blob/main/FreqFusion.py). By utilizing their frequency properties, **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very simple.
 
