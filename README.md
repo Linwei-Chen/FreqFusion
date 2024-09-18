@@ -34,7 +34,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ![feat_fusion_vis](README.assets/feat_fusion_vis.png)
 
-### FreqFusion Usage
+## FreqFusion Usage
 
 The clean code for **FreqFusion** is available [here](https://github.com/Linwei-Chen/FreqFusion/blob/main/FreqFusion.py). By utilizing their frequency properties, **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very simple.
 
