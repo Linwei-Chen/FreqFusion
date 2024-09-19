@@ -47,7 +47,7 @@ _, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 
 
 **Where should I integrate FreqFusion?**
 
-You should integrate FreqFusion wherever you need to perform upsampling. FreqFusion is capable of fully utilizing both low and high-resolution features, effectively upsampling low-resolution images while preserving fine details and semantic information.
+You should integrate FreqFusion wherever you need to perform upsampling. FreqFusion is capable of fully utilizing both low and high-resolution features, it can very effectively recover high-resolution, semantically accurate features from low-resolution high-level features, while enhancing the details of high-resolution low-level features.
 
 The **FreqFusion** relies on mmcv libarary, you can install mmcv-full by: 
 
