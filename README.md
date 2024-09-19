@@ -42,8 +42,12 @@ The clean code for **FreqFusion** is available [here](https://github.com/Linwei-
 m = FreqFusion(hr_channels=64, lr_channels=64)
 hr_feat = torch.rand(1, 64, 32, 32)
 lr_feat = torch.rand(1, 64, 16, 16)
-_, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat)
+_, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 32]
 ```
+
+**Where should I integrate FreqFusion?**
+
+You should integrate FreqFusion wherever you need to perform upsampling. FreqFusion is capable of fully utilizing both low and high-resolution features, effectively upsampling low-resolution images while preserving fine details and semantic information.
 
 The **FreqFusion** relies on mmcv libarary, you can install mmcv-full by: 
 
@@ -53,6 +57,10 @@ pip install mmcv-full==1.5.3 -f https://download.openmmlab.com/mmcv/dist/cu113/t
 ```
 
 You can refer to https://mmcv.readthedocs.io/en/v1.7.0/get_started/installation.html and select the appropriate installation command depending on the type of system, CUDA version, PyTorch version, and MMCV version.
+
+**Tips:**
+
+MMData installation may be annoying, and although the adaptive low/high-filter in FreqFusion can use `torch.nn.functional.unfold` as a replacement (you can try), it may consume a large amount of GPU memory. Therefore, I suggest using MMData for efficiency.
 
 ### Semantic Segmentation
 
