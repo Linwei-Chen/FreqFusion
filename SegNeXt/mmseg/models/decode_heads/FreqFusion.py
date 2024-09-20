@@ -215,9 +215,9 @@ class FreqFusion(nn.Module):
 
         if self.use_high_pass:
             mask_hr = self.kernel_normalizer(mask_hr, self.highpass_kernel, hamming=self.hamming_highpass)
+            hr_feat_hf = hr_feat - carafe(hr_feat, mask_hr, self.highpass_kernel, self.up_group, 1)
             if self.hr_residual:
                 # print('using hr_residual')
-                hr_feat_hf = hr_feat - carafe(hr_feat, mask_hr, self.highpass_kernel, self.up_group, 1)
                 hr_feat = hr_feat_hf + hr_feat
             else:
                 hr_feat = hr_feat_hf
