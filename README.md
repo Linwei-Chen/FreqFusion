@@ -6,7 +6,9 @@ The preliminary [official implementation](https://github.com/Linwei-Chen/FreqFus
 
 Interested readers are also referred to an insightful [Note]() about this work in Zhihu (TODO). 
 
-**Abstract**
+[TOC]
+
+## Abstract👓
 
 Dense image prediction tasks demand features with strong category information and precise spatial boundary details at high resolution. To achieve this, modern hierarchical models often utilize feature fusion, directly adding upsampled coarse features from deep layers and high-resolution features from lower levels. In this paper, we observe rapid variations in fused feature values within objects, resulting in intra-category inconsistency due to disturbed high-frequency features. Additionally, blurred boundaries in fused features lack accurate high frequency, leading to boundary displacement. Building upon these observations, we propose Frequency-Aware Feature Fusion (FreqFusion), integrating an Adaptive Low-Pass Filter (ALPF) generator, an offset generator, and an Adaptive High-Pass Filter (AHPF) generator. The ALPF generator predicts spatially-variant low-pass filters to attenuate high-frequency components within objects, reducing intra-class inconsistency during upsampling. The offset generator refines large inconsistent features and thin boundaries by replacing inconsistent features with more consistent ones through resampling, while the AHPF generator enhances high-frequency detailed boundary information lost during downsampling. Comprehensive visualization and quantitative analysis demonstrate that FreqFusion effectively improves feature consistency and sharpens object boundaries. Extensive experiments across various dense prediction tasks confirm its effectiveness.
 
@@ -34,7 +36,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ![feat_fusion_vis](README.assets/feat_fusion_vis.png)
 
-## FreqFusion Usage
+## FreqFusion Usage🧠
 
 The clean code for **FreqFusion** is available [here](https://github.com/Linwei-Chen/FreqFusion/blob/main/FreqFusion.py). By utilizing their frequency properties, **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very simple.
 
@@ -49,6 +51,13 @@ _, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 
 
 You should integrate FreqFusion wherever you need to perform upsampling. FreqFusion is capable of fully utilizing both low and high-resolution features, it can very effectively recover high-resolution, semantically accurate features from low-resolution high-level features, while enhancing the details of high-resolution low-level features.
 
+```
+m = FreqFusion(hr_channels=64, lr_channels=64)
+hr_feat = torch.rand(1, 64, 32, 32)
+lr_feat = torch.rand(1, 64, 16, 16)
+_, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 32]
+```
+
 The **FreqFusion** relies on mmcv libarary, you can install mmcv-full by: 
 
 ```
@@ -62,7 +71,7 @@ You can refer to https://mmcv.readthedocs.io/en/v1.7.0/get_started/installation.
 
 MMData installation may be annoying, and although the adaptive low/high-filter in FreqFusion can use `torch.nn.functional.unfold` as a replacement (you can try), it may consume a large amount of GPU memory. Therefore, I suggest using MMData for efficiency.
 
-### Semantic Segmentation
+### **Semantic Segmentation**
 
 #### SegNeXt
 
@@ -150,7 +159,7 @@ For more details on installing and using Mask2Former, please refer to the [READM
 
 
 
-### Object Detection
+### **Object Detection**
 
 Code for Faster R-CNN, Mask R-CNN, Panoptic FPN: [Here](./mmdetection) (mmdet==2.28.1)
 
