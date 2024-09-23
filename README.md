@@ -41,21 +41,62 @@ Dense image prediction tasks demand features with strong category information an
 The clean code for **FreqFusion** is available [here](https://github.com/Linwei-Chen/FreqFusion/blob/main/FreqFusion.py). By utilizing their frequency properties, **FreqFusion** is capable of enhancing the quality of both low and high-resolution features (referred to as `lr_feat` and `hr_feat`, respectively, with the assumption that the size of `hr_feat` is twice that of `lr_feat`). The usage is very simple.
 
 ```python
-m = FreqFusion(hr_channels=64, lr_channels=64)
+ff = FreqFusion(hr_channels=64, lr_channels=64)
 hr_feat = torch.rand(1, 64, 32, 32)
 lr_feat = torch.rand(1, 64, 16, 16)
-_, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 32]
+_, hr_feat, lr_feat = ff(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 32]
 ```
 
 **Where should I integrate FreqFusion?**
 
 You should integrate FreqFusion wherever you need to perform upsampling. FreqFusion is capable of fully utilizing both low and high-resolution features, it can very effectively recover high-resolution, semantically accurate features from low-resolution high-level features, while enhancing the details of high-resolution low-level features.
 
+Example of the <u>concat</u> version for feature fusion (SegNeXt, SegFormer):
+
+```python
+x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
+x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # channel=c
+ff1 = FreqFusion(hr_channels=c, lr_channels=c)
+ff2 = FreqFusion(hr_channels=c, lr_channels=2 * c)
+ff3 = FreqFusion(hr_channels=c, lr_channels=3 * c)
+_, x3, x4_up = ff1(hr_feat=x3, lr_feat=x4)
+_, x2, x34_up = ff2(hr_feat=x2, lr_feat=torch.cat([x3, x4_up]))
+_, x1, x234_up = ff3(hr_feat=x1, lr_feat=torch.cat([x2, x34_up]))
+x1234 = torch.cat([x1, x234_up] # channel=4c, 1/4 img size
 ```
-m = FreqFusion(hr_channels=64, lr_channels=64)
-hr_feat = torch.rand(1, 64, 32, 32)
-lr_feat = torch.rand(1, 64, 16, 16)
-_, hr_feat, lr_feat = m(hr_feat=hr_feat, lr_feat=lr_feat) # lr_feat [1, 64, 32, 32]
+
+Another example of the <u>concat</u> version for feature fusion (You can try for UNet):
+
+```python
+x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
+x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # channel=c
+ff1 = FreqFusion(hr_channels=c, lr_channels=c)
+ff2 = FreqFusion(hr_channels=c, lr_channels=c)
+ff3 = FreqFusion(hr_channels=c, lr_channels=c)
+y4 = x4 # channel=c
+_, x3, y4_up = ff1(hr_feat=x3, lr_feat=x4)
+y3 = conv(torch.cat([x3 + y4_up])) # channel=c
+_, x2, y3_up = ff2(hr_feat=x2, lr_feat=y3)
+y2 = conv(torch.cat([x2 + y3_up])) # channel=c
+_, x2, y2_up = ff3(hr_feat=x1, lr_feat=y2)
+y1 = conv(torch.cat([x1 + y2_up])) # channel=c
+```
+
+Example of the <u>add</u> version for feature fusion  (FPN-based methods):
+
+```Python
+x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
+x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # channel=c
+ff1 = FreqFusion(hr_channels=c, lr_channels=c)
+ff2 = FreqFusion(hr_channels=c, lr_channels=c)
+ff3 = FreqFusion(hr_channels=c, lr_channels=c)
+y4 = x4
+_, x3, y4_up = ff1(hr_feat=x3, lr_feat=x4)
+y3 = x3 + y4_up
+_, x2, y3_up = ff2(hr_feat=x2, lr_feat=y3)
+y2 = x2 + y3_up
+_, x2, y2_up = ff3(hr_feat=x1, lr_feat=y2)
+y1 = x1 + y2_up
 ```
 
 The **FreqFusion** relies on mmcv libarary, you can install mmcv-full by: 
