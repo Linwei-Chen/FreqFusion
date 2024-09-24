@@ -65,7 +65,7 @@ _, x1, x234_up = ff3(hr_feat=x1, lr_feat=torch.cat([x2, x34_up]))
 x1234 = torch.cat([x1, x234_up] # channel=4c, 1/4 img size
 ```
 
-Another example of the <u>concat</u> version for feature fusion (You can try for UNet):
+Another example of the <u>concat</u> version for feature fusion (You may try for UNet):
 
 ```python
 x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
@@ -74,7 +74,7 @@ ff1 = FreqFusion(hr_channels=c, lr_channels=c)
 ff2 = FreqFusion(hr_channels=c, lr_channels=c)
 ff3 = FreqFusion(hr_channels=c, lr_channels=c)
 y4 = x4 # channel=c
-_, x3, y4_up = ff1(hr_feat=x3, lr_feat=x4)
+_, x3, y4_up = ff1(hr_feat=x3, lr_feat=y4)
 y3 = conv(torch.cat([x3 + y4_up])) # channel=c
 _, x2, y3_up = ff2(hr_feat=x2, lr_feat=y3)
 y2 = conv(torch.cat([x2 + y3_up])) # channel=c
@@ -91,7 +91,7 @@ ff1 = FreqFusion(hr_channels=c, lr_channels=c)
 ff2 = FreqFusion(hr_channels=c, lr_channels=c)
 ff3 = FreqFusion(hr_channels=c, lr_channels=c)
 y4 = x4
-_, x3, y4_up = ff1(hr_feat=x3, lr_feat=x4)
+_, x3, y4_up = ff1(hr_feat=x3, lr_feat=y4)
 y3 = x3 + y4_up
 _, x2, y3_up = ff2(hr_feat=x2, lr_feat=y3)
 y2 = x2 + y3_up
