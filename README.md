@@ -53,6 +53,8 @@ You should integrate FreqFusion wherever you need to perform upsampling. FreqFus
 
 Example of the <u>concat</u> version for feature fusion (SegNeXt, SegFormer):
 
+You can refer to [ham_head.py](./SegNeXt/mmseg/models/decode_heads/ham_head.py).
+
 ```python
 x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
 x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # channel=c
@@ -83,6 +85,8 @@ y1 = conv(torch.cat([x1 + y2_up])) # channel=c
 ```
 
 Example of the <u>add</u> version for feature fusion  (FPN-based methods):
+
+You can refer to [FPN.py](./mmdetection/mmdet/models/necks/fpn_carafe.py).
 
 ```Python
 x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
