@@ -71,7 +71,7 @@ Another example of the <u>concat</u> version for feature fusion (You may try for
 
 ```python
 x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
-x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # channel=c
+x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # conv1x1s in original FPN to align channel=c
 ff1 = FreqFusion(hr_channels=c, lr_channels=c)
 ff2 = FreqFusion(hr_channels=c, lr_channels=c)
 ff3 = FreqFusion(hr_channels=c, lr_channels=c)
@@ -90,7 +90,7 @@ You can refer to [FPN.py](./mmdetection/mmdet/models/necks/fpn_carafe.py).
 
 ```Python
 x1, x2, x3, x4 = backbone(img) #x1, x2, x3, x4 in 1/4, 1/8, 1/16, 1/32
-x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # channel=c
+x1, x2, x3, x4 = conv1x1(x1), conv1x1(x2), conv1x1(x3), conv1x1(x4) # conv1x1s in original FPN to align channel=c
 ff1 = FreqFusion(hr_channels=c, lr_channels=c)
 ff2 = FreqFusion(hr_channels=c, lr_channels=c)
 ff3 = FreqFusion(hr_channels=c, lr_channels=c)
