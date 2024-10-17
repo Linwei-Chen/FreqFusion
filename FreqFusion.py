@@ -175,22 +175,22 @@ class FreqFusion(nn.Module):
         if self.semi_conv:
             if self.comp_feat_upsample:
                 if self.use_high_pass:
-                    mask_hr_hr_feat = self.content_encoder2(compressed_hr_feat)
-                    mask_hr_init = self.kernel_normalizer(mask_hr_hr_feat, self.highpass_kernel, hamming=self.hamming_highpass)
-                    compressed_hr_feat = compressed_hr_feat + compressed_hr_feat - carafe(compressed_hr_feat, mask_hr_init, self.highpass_kernel, self.up_group, 1)
+                    mask_hr_hr_feat = self.content_encoder2(compressed_hr_feat) #从hr_feat得到初始高通滤波特征
+                    mask_hr_init = self.kernel_normalizer(mask_hr_hr_feat, self.highpass_kernel, hamming=self.hamming_highpass) #kernel归一化得到初始高通滤波
+                    compressed_hr_feat = compressed_hr_feat + compressed_hr_feat - carafe(compressed_hr_feat, mask_hr_init, self.highpass_kernel, self.up_group, 1) #利用初始高通滤波对压缩hr_feat的高频增强 （x-x的低通结果=x的高通结果）
                     
-                    mask_lr_hr_feat = self.content_encoder(compressed_hr_feat)
-                    mask_lr_init = self.kernel_normalizer(mask_lr_hr_feat, self.lowpass_kernel, hamming=self.hamming_lowpass)
+                    mask_lr_hr_feat = self.content_encoder(compressed_hr_feat) #从hr_feat得到初始低通滤波特征
+                    mask_lr_init = self.kernel_normalizer(mask_lr_hr_feat, self.lowpass_kernel, hamming=self.hamming_lowpass) #kernel归一化得到初始低通滤波
                     
-                    mask_lr_lr_feat_lr = self.content_encoder(compressed_lr_feat)
-                    mask_lr_lr_feat = F.interpolate(
+                    mask_lr_lr_feat_lr = self.content_encoder(compressed_lr_feat) #从hr_feat得到另一部分初始低通滤波特征
+                    mask_lr_lr_feat = F.interpolate( #利用初始低通滤波对另一部分初始低通滤波特征上采样
                         carafe(mask_lr_lr_feat_lr, mask_lr_init, self.lowpass_kernel, self.up_group, 2), size=compressed_hr_feat.shape[-2:], mode='nearest')
-                    mask_lr = mask_lr_hr_feat + mask_lr_lr_feat
+                    mask_lr = mask_lr_hr_feat + mask_lr_lr_feat #将两部分初始低通滤波特征合在一起
 
-                    mask_lr_init = self.kernel_normalizer(mask_lr, self.lowpass_kernel, hamming=self.hamming_lowpass)
-                    mask_hr_lr_feat = F.interpolate(
+                    mask_lr_init = self.kernel_normalizer(mask_lr, self.lowpass_kernel, hamming=self.hamming_lowpass) #得到初步融合的初始低通滤波
+                    mask_hr_lr_feat = F.interpolate( #使用初始低通滤波对lr_feat处理，分辨率得到提高
                         carafe(self.content_encoder2(compressed_lr_feat), mask_lr_init, self.lowpass_kernel, self.up_group, 2), size=compressed_hr_feat.shape[-2:], mode='nearest')
-                    mask_hr = mask_hr_hr_feat + mask_hr_lr_feat
+                    mask_hr = mask_hr_hr_feat + mask_hr_lr_feat # 最终高通滤波特征
                 else: raise NotImplementedError
             else:
                 mask_lr = self.content_encoder(compressed_hr_feat) + F.interpolate(self.content_encoder(compressed_lr_feat), size=compressed_hr_feat.shape[-2:], mode='nearest')
