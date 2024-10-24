@@ -26,7 +26,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ## News📰
 
-- **2024-10-24 Updated**: We have added a self-implemented CARAFE operator, which means you no longer need to rely on the mmcv library. This update allows for greater flexibility in environments where external dependencies are limited or restricted. To use the newly implemented CARAFE operator, simply include the relevant module in your project. Please note that if you were previously using the Pretrained model that utilized mmcv's CARAFE implementation, it is recommended to retrain your model for optimal performance with this new operator.
+- **2024-10-24 Updated**: We have added a self-implemented CARAFE operator, which means you no longer need to rely on the mmcv library. This update allows for greater flexibility in environments where external dependencies are limited or restricted. Please note that if you were previously using the Pretrained model that utilized mmcv's CARAFE implementation, it is recommended to retrain your model for optimal performance with this new operator.
 
 
 
