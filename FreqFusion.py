@@ -3,16 +3,54 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mmcv.ops.carafe import normal_init, xavier_init, carafe
 from torch.utils.checkpoint import checkpoint
 import warnings
 import numpy as np
 
-def normal_init(module, mean=0, std=1, bias=0):
-    if hasattr(module, 'weight') and module.weight is not None:
-        nn.init.normal_(module.weight, mean, std)
-    if hasattr(module, 'bias') and module.bias is not None:
-        nn.init.constant_(module.bias, bias)
+try:
+    from mmcv.ops.carafe import normal_init, xavier_init, carafe
+except ImportError:
+    
+    def xavier_init(module: nn.Module,
+                    gain: float = 1,
+                    bias: float = 0,
+                    distribution: str = 'normal') -> None:
+        assert distribution in ['uniform', 'normal']
+        if hasattr(module, 'weight') and module.weight is not None:
+            if distribution == 'uniform':
+                nn.init.xavier_uniform_(module.weight, gain=gain)
+            else:
+                nn.init.xavier_normal_(module.weight, gain=gain)
+        if hasattr(module, 'bias') and module.bias is not None:
+            nn.init.constant_(module.bias, bias)
+
+    def carafe(x, normed_mask, kernel_size, group=1, up=1):
+            b, c, h, w = x.shape
+            _, m_c, _, _ = normed_mask.shape
+            assert m_c == kernel_size ** 2 * up ** 2
+            pad = kernel_size // 2
+            # print(pad)
+            pad_x = F.pad(x, pad=[pad] * 4, mode='reflect')
+            # print(pad_x.shape)
+            unfold_x = F.unfold(pad_x, kernel_size=(kernel_size, kernel_size), stride=1, padding=0)
+            unfold_x = unfold_x.reshape(b, c, 1, kernel_size, kernel_size, h, w).repeat(1, 1, up ** 2, 1, 1, 1, 1)
+            normed_mask = normed_mask.reshape(b, 1, up ** 2, kernel_size, kernel_size, h, w)
+            res = unfold_x * normed_mask
+            # res[:, :, 0] = 1
+            # res[:, :, 1] = 2
+            # res[:, :, 2] = 3
+            # res[:, :, 3] = 4
+            res = res.sum(dim=(3, 4)).reshape(b, up**2 * c, h, w)
+            res = F.pixel_shuffle(res, up)
+            # print(res.shape)
+            # print(res)
+            return res
+
+    def normal_init(module, mean=0, std=1, bias=0):
+        if hasattr(module, 'weight') and module.weight is not None:
+            nn.init.normal_(module.weight, mean, std)
+        if hasattr(module, 'bias') and module.bias is not None:
+            nn.init.constant_(module.bias, bias)
 
 
 def constant_init(module, val, bias=0):
@@ -145,7 +183,7 @@ class FreqFusion(nn.Module):
         if scale_factor is not None:
             mask = F.pixel_shuffle(mask, self.scale_factor)
         n, mask_c, h, w = mask.size()
-        mask_channel = int(mask_c / float(kernel**2))
+        mask_channel = int(mask_c / float(kernel**2)) # group
         # mask = mask.view(n, mask_channel, -1, h, w)
         # mask = F.softmax(mask, dim=2, dtype=mask.dtype)
         # mask = mask.view(n, mask_c, h, w).contiguous()
@@ -380,3 +418,9 @@ def compute_similarity(input_tensor, k=3, dilation=1, sim='cos'):
     # 将结果重塑回[B, KxK-1, H, W]的形状
     similarity = similarity.view(B, k * k - 1, H, W)
     return similarity
+
+
+if __name__ == '__main__':
+    x = torch.rand(4, 128, 16, 16)
+    mask = torch.rand(4, 4 * 25, 16, 16)
+    carafe(x, mask, kernel_size=5, group=1, up=2)
