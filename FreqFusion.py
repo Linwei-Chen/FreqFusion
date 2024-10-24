@@ -210,7 +210,7 @@ class FreqFusion(nn.Module):
         mask =  mask.permute(0, 1, 4, 2, 3).view(n, -1, h, w).contiguous()
         return mask
 
-    def forward(self, hr_feat, lr_feat, use_checkpoint=False):
+    def forward(self, hr_feat, lr_feat, use_checkpoint=False): # use check_point to save GPU memory
         if use_checkpoint:
             return checkpoint(self._forward, hr_feat, lr_feat)
         else:
