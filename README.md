@@ -2,7 +2,7 @@
 
 TPAMI 2024：Frequency-aware Feature Fusion for Dense Image Prediction
 
-The preliminary [official implementation](https://github.com/Linwei-Chen/FreqFusion) of our TPAMI 2024 paper "[Frequency-aware Feature Fusion for Dense Image Prediction](https://www.arxiv.org/abs/2408.12879)", which is also available at https://github.com/ying-fu/FreqFusion.
+The preliminary [official implementation](https://github.com/Linwei-Chen/FreqFusion) of our TPAMI 2024 paper "Frequency-aware Feature Fusion for Dense Image Prediction" ([IEEE](https://ieeexplore.ieee.org/document/10648934) [arxiv](https://www.arxiv.org/abs/2408.12879)) , which is also available at https://github.com/ying-fu/FreqFusion.
 
 Interested readers are also referred to an insightful [Note]() about this work in Zhihu (TODO). 
 
