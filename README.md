@@ -308,6 +308,25 @@ Original code of mmdet can be found [here](https://github.com/open-mmlab/mmdetec
 
 For more details on installing and using mmdetection, please refer to the [README](./mmdetection/README.md) file.
 
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="
+      https://api.star-history.com/svg?repos=Linwei-Chen/FreqFusion&type=Date&theme=dark
+    "
+  />
+  <source
+    media="(prefers-color-scheme: light)"
+    srcset="
+      https://api.star-history.com/svg?repos=Linwei-Chen/FreqFusion&type=Date
+    "
+  />
+  <img
+    alt="Star History Chart"
+    src="https://api.star-history.com/svg?repos=Linwei-Chen/FreqFusion&type=Date"
+  />
+</picture>
+
 ## Citation
 
 If you use our dataset or code for research, please cite this paper (early access now): 
