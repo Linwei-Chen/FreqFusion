@@ -26,9 +26,22 @@ Dense image prediction tasks demand features with strong category information an
 
 ## News📰
 
+- **2024-10-24 mmcv installation**: 
+
+- ```
+  mmcv installation：
+  mmcv 1.x 
+  pip install mmcv-full==1.7.0 -f https://download.openmmlab.com/mmcv/dist/cu117/torch1.13/index.html
+  Ref: https://mmcv.readthedocs.io/en/master/get_started/installation.html
+  
+  mmcv 2.x
+  pip install mmcv==2.2.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.4/index.html
+  Ref: https://mmcv.readthedocs.io/en/latest/get_started/installation.html
+  ```
+
 - **2024-10-24 Updated**: We have added a self-implemented CARAFE operator ([here](https://github.com/Linwei-Chen/FreqFusion/blob/main/FreqFusion.py)), which means you no longer need to rely on the mmcv library. This update allows for greater flexibility in environments where external dependencies are limited or restricted. Please note that if you were previously using the Pretrained model that utilized mmcv's CARAFE implementation, it is recommended to retrain your model for optimal performance with this new operator.
 
-
+  
 
 ## Method Overview💡
 
