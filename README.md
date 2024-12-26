@@ -28,7 +28,7 @@ Dense image prediction tasks demand features with strong category information an
 
 - **2024-10-24 mmcv installation**: 
 
-- ```
+  ```
   mmcv installation：
   mmcv 1.x 
   pip install mmcv-full==1.7.0 -f https://download.openmmlab.com/mmcv/dist/cu117/torch1.13/index.html
