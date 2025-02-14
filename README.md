@@ -26,7 +26,9 @@ Dense image prediction tasks demand features with strong category information an
 
 ## News📰
 
-- **2024-10-24 mmcv installation**: 
+- **2025-02-14** 🔧 Feature similarity analysis tool  is available at [here](./feat_tool).
+
+- **2024-10-24** 💻 mmcv installation: 
 
   ```
   mmcv installation：
@@ -345,15 +347,16 @@ For more details on installing and using mmdetection, please refer to the [READM
 If you use our dataset or code for research, please cite this paper (early access now): 
 
 ```
-@ARTICLE{2024freqfusion,
+@article{chen2024frequency,
   author={Chen, Linwei and Fu, Ying and Gu, Lin and Yan, Chenggang and Harada, Tatsuya and Huang, Gao},
   journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
   title={Frequency-aware Feature Fusion for Dense Image Prediction}, 
   year={2024},
-  volume={1},
-  number={1},
-  pages={1-18},
-  doi={10.1109/TPAMI.2024.3449959}}
+  volume={46},
+  number={12},
+  pages={10763-10780},
+  doi={10.1109/TPAMI.2024.3449959}
+}
 ```
 
 ## Acknowledgment
