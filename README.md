@@ -26,7 +26,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ## News📰
 
-- **2025-02-14** 🔧 Feature similarity analysis tool  is available at [here](./feat_tool).
+- **2025-02-14** 🔧 Feature similarity analysis tool  is available at [here](./feat_tool/tpami2024-feature_similarity_analysis_released.py).
 
 ![image-20250214164031767](README.assets/image-20250214164031767.png)
 
