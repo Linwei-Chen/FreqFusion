@@ -26,7 +26,7 @@ Dense image prediction tasks demand features with strong category information an
 
 ## News📰
 
-- **2025-0905** Insightful [Note](https://zhuanlan.zhihu.com/p/1947267652654442062) about **Feature Fusion** and **Frequency Learning** in Zhihu.
+- **2025-09-05** Insightful [Note](https://zhuanlan.zhihu.com/p/1947267652654442062) about **Feature Fusion** and **Frequency Learning** in Zhihu.
 - **2025-02-14** 🔧 Feature similarity analysis tool  is available at [here](./feat_tool/) [[file](./feat_tool/tpami2024-feature_similarity_analysis_released.py)].
 
 ![image-20250214164031767](README.assets/image-20250214164031767.png)
