@@ -26,8 +26,10 @@ Dense image prediction tasks demand features with strong category information an
 
 ## News📰
 
+- **2025-10-18** The core concept of our frequency-aware fusion was adopted by **WeaveSeg** for nuclei instance segmentation, accepted by the **International Conference on Computer Vision (ICCV) 2025**. [[Paper\]](https://openaccess.thecvf.com/content/ICCV2025/papers/Li_WeaveSeg_Iterative_Contrast-weaving_and_Spectral_Feature-refining_for_Nuclei_Instance_Segmentation_ICCV_2025_paper.pdf)
 - **2025-09-05** Insightful [Note](https://zhuanlan.zhihu.com/p/1947267652654442062) about **Feature Fusion** and **Frequency Learning** in Zhihu.
-- **2025-02-14**  Our method, [**FreqFusion**](https://github.com/Linwei-Chen/FreqFusion), was adopted by ACVLab in their solution for the NTIRE 2025 Reflection Removal Challenge (CVPR 2025 Workshop), which secured a top **2%** global ranking (6th/244). [[Event\]](https://sites.google.com/view/acvlab) [[Tech Report\]](https://openaccess.thecvf.com/content/CVPR2025W/NTIRE/supplemental/Yang_NTIRE_2025_Challenge_CVPRW_2025_supplemental.pdf)
+- **2025-06-18** Our method, **FreqFusion**, was successfully applied in **ModFusion** to enhance esophageal cancer segmentation, published in the journal **Knowledge-Based Systems (KBS)**. [[Paper\]](https://www.sciencedirect.com/science/article/pii/S0950705125009773)
+- **2025-04-09**  Our method, [**FreqFusion**](https://github.com/Linwei-Chen/FreqFusion), was adopted by ACVLab in their solution for the NTIRE 2025 Reflection Removal Challenge (CVPR 2025 Workshop), which secured a top **2%** global ranking (6th/244). [[Event\]](https://sites.google.com/view/acvlab) [[Tech Report\]](https://openaccess.thecvf.com/content/CVPR2025W/NTIRE/supplemental/Yang_NTIRE_2025_Challenge_CVPRW_2025_supplemental.pdf)
 - **2025-02-14** 🔧 Feature similarity analysis tool  is available at [here](./feat_tool/) [[File](./feat_tool/tpami2024-feature_similarity_analysis_released.py)].
 
 ![image-20250214164031767](README.assets/image-20250214164031767.png)
