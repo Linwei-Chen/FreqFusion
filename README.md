@@ -10,7 +10,7 @@ Interested readers are also referred to an insightful [Note](https://zhuanlan.zh
 
 ## News📰
 
-- **[2025.11.20]** Our paper, [**FreqFusion**](https://github.com/Linwei-Chen/FreqFusion), has been recognized as an **ESI Hot Paper (🔥top 0.1%)** and **Highly Cited Paper (🏆top 1%)**!
+- **2025.11.20** Our paper, [**FreqFusion**](https://github.com/Linwei-Chen/FreqFusion), has been recognized as an **ESI Hot Paper (🔥top 0.1%)** and **Highly Cited Paper (🏆top 1%)**!
 - **2025-10-18** The core concept of our  [**FreqFusion**](https://github.com/Linwei-Chen/FreqFusion) was adopted by **WeaveSeg** for nuclei instance segmentation, accepted by the **International Conference on Computer Vision (ICCV) 2025**. [[Paper\]](https://openaccess.thecvf.com/content/ICCV2025/papers/Li_WeaveSeg_Iterative_Contrast-weaving_and_Spectral_Feature-refining_for_Nuclei_Instance_Segmentation_ICCV_2025_paper.pdf)
 - **2025-09-05** Insightful [Note](https://zhuanlan.zhihu.com/p/1947267652654442062) about **Feature Fusion** and **Frequency Learning** in Zhihu.
 - **2025-09-05** [**FreqFusion**](https://github.com/Linwei-Chen/FreqFusion) was utilized as a core component for feature aggregation in a new diffusion-based framework for retinal image segmentation, accepted by IEEE Transactions on Medical Imaging (TMI). [[Paper]](https://ieeexplore.ieee.org/document/11146911)
